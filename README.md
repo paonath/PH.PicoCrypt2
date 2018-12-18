@@ -1,7 +1,9 @@
-# PH.PicoCrypt2
+# PH.PicoCrypt2 - [![NuGet Badge](https://buildstats.info/nuget/PH.PicoCrypt2)](https://www.nuget.org/packages/PH.PicoCrypt2/)
 netstandard utility for simple crypt/decrypt 
 
 The AesCrypt service class work using Rijndael.
+
+The package is available on  [nuget](https://www.nuget.org/packages/PH.PicoCrypt2) 
 
 ## Features
 
