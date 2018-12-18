@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace PH.PicoCrypt2.Test
@@ -15,9 +16,11 @@ namespace PH.PicoCrypt2.Test
             bool disposed = a.Disposed;
 
             var cypherText = a.EncryptUtf8(s, p);
-            
+            var text2 = a.EncryptUtf8(s, p, p);
 
 
+
+            Assert.Equal(cypherText, text2);
             Assert.True(disposed != true);
             Assert.NotEqual(cypherText, s);
 
@@ -119,6 +122,23 @@ namespace PH.PicoCrypt2.Test
             Assert.NotNull(exc);
             Assert.Equal(s,good);
 
+
+        }
+
+
+        [Fact]
+        public void GenerateRandomStrings()
+        {
+            
+            IPicoCrypt a = new AesCrypt();
+
+            var s = a.GenerateRandomString(7);
+
+            var onlyNumbers = a.GenerateRandomString(5, new List<string>(){"0"}, RandomStringMode.OnlyNumbers);
+            var i = Convert.ToInt32(onlyNumbers);
+
+            Assert.True(s.Length == 7);
+            Assert.Equal(onlyNumbers, $"{i}");
 
         }
     }
