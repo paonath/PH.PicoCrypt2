@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PH.PicoCrypt2", "PH.PicoCrypt2\PH.PicoCrypt2.csproj", "{FD24600E-88E5-4804-A25A-C3C41FE95922}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{1EFB65EA-0E5C-4A6B-8E41-84653CB7DAA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PH.PicoCrypt2.Test", "PH.PicoCrypt2.Test\PH.PicoCrypt2.Test.csproj", "{1223F3CA-0126-4A6F-AF85-B379110BA737}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD24600E-88E5-4804-A25A-C3C41FE95922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD24600E-88E5-4804-A25A-C3C41FE95922}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD24600E-88E5-4804-A25A-C3C41FE95922}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD24600E-88E5-4804-A25A-C3C41FE95922}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1223F3CA-0126-4A6F-AF85-B379110BA737}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1223F3CA-0126-4A6F-AF85-B379110BA737}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1223F3CA-0126-4A6F-AF85-B379110BA737}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1223F3CA-0126-4A6F-AF85-B379110BA737}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1223F3CA-0126-4A6F-AF85-B379110BA737} = {1EFB65EA-0E5C-4A6B-8E41-84653CB7DAA4}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0C0951F6-B7A8-4619-9665-4B88E5585FA1}
+	EndGlobalSection
+EndGlobal
