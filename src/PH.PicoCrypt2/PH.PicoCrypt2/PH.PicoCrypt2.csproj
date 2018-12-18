@@ -4,7 +4,8 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/paonath/PH.WorkingDaysAndTime/blob/master/LICENSE</PackageLicenseUrl>
+    <!--<PackageLicenseUrl>https://github.com/paonath/PH.WorkingDaysAndTime/blob/master/LICENSE</PackageLicenseUrl>-->
+    
 
     <PackageId>PH.PicoCrypt2</PackageId>
 
@@ -30,5 +31,19 @@
 
 
   </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="licenses\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\LICENSE" Link="licenses\LICENSE" />
+  </ItemGroup>
+
+  
 
 </Project>
