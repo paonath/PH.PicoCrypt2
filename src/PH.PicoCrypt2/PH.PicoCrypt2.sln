@@ -1,13 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PH.PicoCrypt2", "PH.PicoCrypt2\PH.PicoCrypt2.csproj", "{FD24600E-88E5-4804-A25A-C3C41FE95922}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PH.PicoCrypt2", "PH.PicoCrypt2\PH.PicoCrypt2.csproj", "{FD24600E-88E5-4804-A25A-C3C41FE95922}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{1EFB65EA-0E5C-4A6B-8E41-84653CB7DAA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PH.PicoCrypt2.Test", "PH.PicoCrypt2.Test\PH.PicoCrypt2.Test.csproj", "{1223F3CA-0126-4A6F-AF85-B379110BA737}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PH.PicoCrypt2.Test", "PH.PicoCrypt2.Test\PH.PicoCrypt2.Test.csproj", "{1223F3CA-0126-4A6F-AF85-B379110BA737}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{15A53004-AAD2-4930-81F8-6C230F5EA8A0}"
+	ProjectSection(SolutionItems) = preProject
+		BuildPackage.bat = BuildPackage.bat
+		..\..\README.md = ..\..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

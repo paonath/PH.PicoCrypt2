@@ -4,6 +4,10 @@ using System.Text.RegularExpressions;
 
 namespace PH.PicoCrypt2
 {
+    /// <summary>
+    /// Crypt Service
+    /// </summary>
+    /// <seealso cref="System.IDisposable" />
     public interface IPicoCrypt : IDisposable
     {
         /// <summary>
@@ -77,7 +81,7 @@ namespace PH.PicoCrypt2
         /// <param name="length">string length</param>
         /// <param name="excludePattern">pattern for exclusion</param>
         /// <param name="mode">random mode</param>
-        /// <returnsa random string></returns>
+        // <returns>a random string</returns>
         string GenerateRandomString(int length, Regex excludePattern, RandomStringMode mode = RandomStringMode.Full);
 
         /// <summary>
