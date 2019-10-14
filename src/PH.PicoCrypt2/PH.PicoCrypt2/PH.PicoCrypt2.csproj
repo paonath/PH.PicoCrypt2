@@ -4,9 +4,6 @@
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <!--<PackageLicenseUrl>https://github.com/paonath/PH.WorkingDaysAndTime/blob/master/LICENSE</PackageLicenseUrl>-->
-    
-
     <PackageId>PH.PicoCrypt2</PackageId>
 
     
@@ -19,14 +16,12 @@
     
     <PackageTags>UTF8,string textt,encryption,decryption,hashing</PackageTags>
 
-    <PackageVersion>1.0.2</PackageVersion>
-    <IconUrl>https://raw.githubusercontent.com/paonath/Icons/master/nuget_es_img.png</IconUrl>
+    <PackageVersion>1.0.3</PackageVersion>
     <Authors>Paolo Innocenti</Authors>
     <Copyright>Copyright PH 2019 (c) paonath@gmail.com. All rights reserved.</Copyright>
     <RepositoryUrl>https://github.com/paonath/PH.PicoCrypt2</RepositoryUrl>
     <PackageProjectUrl>https://github.com/paonath/PH.PicoCrypt2</PackageProjectUrl>
-    <PackageIconUrl>https://raw.githubusercontent.com/paonath/Icons/master/nuget_es_img.png</PackageIconUrl>
-
+   
 
    
   </PropertyGroup>
@@ -52,6 +47,19 @@
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.3" />
   </ItemGroup>
 
-  
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <SourceRevisionId>build$([System.DateTime]::UtcNow.ToString("yyyyMMddHHmmss"))</SourceRevisionId>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <SourceRevisionId>build-$([System.DateTime]::UtcNow.ToString("yyyyMMdd"))</SourceRevisionId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\nuget_es_img.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+  <PropertyGroup>
+    <PackageIcon>nuget_es_img.png</PackageIcon>
+  </PropertyGroup>
 
 </Project>
