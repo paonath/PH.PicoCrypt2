@@ -16,7 +16,7 @@
     
     <PackageTags>UTF8,string textt,encryption,decryption,hashing</PackageTags>
 
-    <PackageVersion>1.0.3</PackageVersion>
+    <PackageVersion>1.0.4</PackageVersion>
     <Authors>Paolo Innocenti</Authors>
     <Copyright>Copyright PH 2019 (c) paonath@gmail.com. All rights reserved.</Copyright>
     <RepositoryUrl>https://github.com/paonath/PH.PicoCrypt2</RepositoryUrl>

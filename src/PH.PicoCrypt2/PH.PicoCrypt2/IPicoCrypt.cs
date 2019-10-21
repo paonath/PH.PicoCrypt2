@@ -67,32 +67,69 @@ namespace PH.PicoCrypt2
         string GenerateRandomString(int length, RandomStringMode mode = RandomStringMode.Full);
 
         /// <summary>
-        /// Generate a Random string value excluding given values
+        /// Generate a Random string value safe for use with url or html, etc.
         /// </summary>
         /// <param name="length">string length</param>
-        /// <param name="excludeValues">string to exclude</param>
         /// <param name="mode">random mode</param>
-        /// <returns>a random string</returns>
-        string GenerateRandomString(int length,List<string> excludeValues, RandomStringMode mode = RandomStringMode.Full);
+        /// <returns></returns>
+        string GenerateRandomStringSafeForWebAndUrl(int length, RandomStringMode mode = RandomStringMode.Full);
 
-        /// <summary>
-        /// Generate a Random string value excluding given regex pattern
-        /// </summary>
-        /// <param name="length">string length</param>
-        /// <param name="excludePattern">pattern for exclusion</param>
-        /// <param name="mode">random mode</param>
-        // <returns>a random string</returns>
-        string GenerateRandomString(int length, Regex excludePattern, RandomStringMode mode = RandomStringMode.Full);
 
-        /// <summary>
-        /// Generate a Random string value excluding given values and pattern
-        /// </summary>
-        /// <param name="length">string length</param>
-        /// <param name="excludeValues">string to exclude</param>
-        /// <param name="excludePattern">pattern for exclusion</param>
-        /// <param name="mode">random mode</param>
-        /// <returns>a random string</returns>
-        string GenerateRandomString(int length,List<string> excludeValues, Regex excludePattern, RandomStringMode mode = RandomStringMode.Full);
+
+        ///// <summary>
+        ///// Generate a Random string value excluding given values
+        ///// </summary>
+        ///// <param name="length">string length</param>
+        ///// <param name="excludeValues">string to exclude</param>
+        ///// <param name="mode">random mode</param>
+        ///// <returns>a random string</returns>
+        //string GenerateRandomString(int length,List<string> excludeValues, RandomStringMode mode = RandomStringMode.Full);
+
+        ///// <summary>Generates the random string safe for web and URL.</summary>
+        ///// <param name="length">The length.</param>
+        ///// <param name="excludeValues">The exclude values.</param>
+        ///// <param name="mode">The mode.</param>
+        ///// <returns></returns>
+        //string GenerateRandomStringSafeForWebAndUrl(int length,List<string> excludeValues, RandomStringMode mode = RandomStringMode.Full);
+
+        ///// <summary>
+        ///// Generate a Random string value excluding given regex pattern
+        ///// </summary>
+        ///// <param name="length">string length</param>
+        ///// <param name="excludePattern">pattern for exclusion</param>
+        ///// <param name="mode">random mode</param>
+        //// <returns>a random string</returns>
+        //string GenerateRandomString(int length, Regex excludePattern, RandomStringMode mode = RandomStringMode.Full);
+
+        ///// <summary>Generates the random string safe for web and URL.</summary>
+        ///// <param name="length">The length.</param>
+        ///// <param name="excludePattern">The exclude pattern.</param>
+        ///// <param name="mode">The mode.</param>
+        ///// <returns></returns>
+        //string GenerateRandomStringSafeForWebAndUrl(int length, Regex excludePattern, RandomStringMode mode = RandomStringMode.Full);
+
+        ///// <summary>
+        ///// Generate a Random string value excluding given values and pattern
+        ///// </summary>
+        ///// <param name="length">string length</param>
+        ///// <param name="excludeValues">string to exclude</param>
+        ///// <param name="excludePattern">pattern for exclusion</param>
+        ///// <param name="mode">random mode</param>
+        ///// <returns>a random string</returns>
+        //string GenerateRandomString(int length,List<string> excludeValues, Regex excludePattern, RandomStringMode mode = RandomStringMode.Full);
+
+        ///// <summary>Generates the random string safe for web and URL.</summary>
+        ///// <param name="length">The length.</param>
+        ///// <param name="excludeValues">The exclude values.</param>
+        ///// <param name="excludePattern">The exclude pattern.</param>
+        ///// <param name="mode">The mode.</param>
+        ///// <returns></returns>
+        //string GenerateRandomStringSafeForWebAndUrl(int length,List<string> excludeValues, Regex excludePattern, RandomStringMode mode = RandomStringMode.Full);
+
+        /// <summary>Shuffles the string.</summary>
+        /// <param name="orderedString">The ordered string.</param>
+        /// <returns></returns>
+        string ShuffleString(string orderedString);
 
 
         /// <summary>

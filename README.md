@@ -41,3 +41,11 @@ IPicoCrypt a = new AesCrypt();
 var plainText = a.DecryptUtf8(s, p);
 //plainText: "a string"
 ```
+
+**GenerateRandomString(int length, RandomStringMode mode = RandomStringMode.Full)**
+```c#
+IPicoCrypt a = new AesCrypt();
+var s = a.GenerateRandomString(7);
+var onlyNumbers = a.GenerateRandomString(5, RandomStringMode.OnlyNumbers);
+
+```

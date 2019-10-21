@@ -18,6 +18,7 @@ namespace PH.PicoCrypt2
         private readonly Random _r;
         private SHA256 _sha256;
         private SHA512 _sha512;
+        private bool _safeWeb;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AesCrypt"/> class.
@@ -28,7 +29,7 @@ namespace PH.PicoCrypt2
             _sha256  = SHA256Managed.Create();
             _sha512  = SHA512Managed.Create();
             Disposed = false;
-
+            _safeWeb = false;
         }
 
         /// <summary>
@@ -51,7 +52,6 @@ namespace PH.PicoCrypt2
         {
             return EncryptUtf8(plainText, password, password);
         }
-       
 
 
         /// <summary>Encrypt a UTF8 text</summary>
@@ -69,15 +69,17 @@ namespace PH.PicoCrypt2
         [NotNull]
         public string EncryptUtf8([NotNull] string plainText, [NotNull] string password, [NotNull] string salt)
         {
-            if (string.IsNullOrEmpty(plainText) ||string.IsNullOrWhiteSpace(plainText))
+            if (string.IsNullOrEmpty(plainText) || string.IsNullOrWhiteSpace(plainText))
             {
                 throw new ArgumentException("Value cannot be null or empty or WhiteSpace.", nameof(plainText));
             }
-            if (string.IsNullOrEmpty(password) ||string.IsNullOrWhiteSpace(password))
+
+            if (string.IsNullOrEmpty(password) || string.IsNullOrWhiteSpace(password))
             {
                 throw new ArgumentException("Value cannot be null or empty or WhiteSpace.", nameof(password));
             }
-            if (string.IsNullOrEmpty(salt) ||string.IsNullOrWhiteSpace(salt))
+
+            if (string.IsNullOrEmpty(salt) || string.IsNullOrWhiteSpace(salt))
             {
                 throw new ArgumentException("Value cannot be null or empty or WhiteSpace.", nameof(salt));
             }
@@ -99,7 +101,7 @@ namespace PH.PicoCrypt2
 
                         return Convert.ToBase64String(msEncrypt.ToArray());
                     }
-                }    
+                }
             }
         }
 
@@ -111,7 +113,7 @@ namespace PH.PicoCrypt2
         [CanBeNull]
         public string DecryptUtf8(string encryptedText, string password, bool throwOnError = false)
         {
-            return DecryptUtf8(encryptedText, password, password,throwOnError);
+            return DecryptUtf8(encryptedText, password, password, throwOnError);
         }
 
         /// <summary>Privates the decrypt UTF8.</summary>
@@ -125,7 +127,6 @@ namespace PH.PicoCrypt2
         {
             try
             {
-                
                 using (var r = GetCipher(password, salt))
                 {
                     var data = Convert.FromBase64String(encryptedText);
@@ -144,7 +145,8 @@ namespace PH.PicoCrypt2
                                 {
                                     var buffer = new byte[16];
                                     int count;
-                                    while ((count = decryptedData.Read(buffer, 0, buffer.Length)) != 0) dataOut.Write(buffer, 0, count);
+                                    while ((count = decryptedData.Read(buffer, 0, buffer.Length)) != 0)
+                                        dataOut.Write(buffer, 0, count);
 
                                     return System.Text.Encoding.UTF8.GetString(dataOut.ToArray());
                                 }
@@ -152,7 +154,6 @@ namespace PH.PicoCrypt2
                         }
                     }
                 }
-
             }
             catch /*(Exception exception)*/
             {
@@ -162,7 +163,6 @@ namespace PH.PicoCrypt2
                 }
 
                 return null;
-
             }
         }
 
@@ -189,75 +189,358 @@ namespace PH.PicoCrypt2
             return GenerateRandomString(length, new List<string>(), mode);
         }
 
-        /// <summary>Privates the generate random string.</summary>
-        /// <param name="length">The length.</param>
-        /// <param name="mode">The mode.</param>
+        /// <summary>
+        /// Generate a Random string value safe for use with url or html, etc.
+        /// </summary>
+        /// <param name="length">string length</param>
+        /// <param name="mode">random mode</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException">mode - null</exception>
         [NotNull]
+        public string GenerateRandomStringSafeForWebAndUrl(int length, RandomStringMode mode = RandomStringMode.Full)
+        {
+            _safeWeb = true;
+            var r = GenerateRandomString(length, mode);
+            _safeWeb = false;
+            return r;
+        }
+
         private string PrivateGenerateRandomString(int length, RandomStringMode mode)
         {
-            string charsUP = "QWERTYUIOPASDFGHJKLZXCVBNM";
-            string charsLO = "qwertyuiopasdfghjklzxcvbnm";
-            string sims    = "|\\!\"£%&/()=?'^[]+*@#°,;.:-_<>";
-            string chars   = $@"QqWwEe€RrTtYyUuIiOoPpéè[*++AaSsDdFfGgHhJjKkLlçò@°à#§ù><ZzXxCcVvBbNnMm-_1!23£4$5%6&7890?ì^";
-            string numbers = "1234567890";
-
-            switch (mode)
+            if (length == 0)
             {
-                case RandomStringMode.Full:
-                    break;
-                case RandomStringMode.CharactersOnly:
-                    sims    = charsLO;
-                    chars   = $"{charsUP}{charsLO}";
-                    numbers = charsUP;
-                    break;
-                case RandomStringMode.CharacterAndNumbers:
-                    sims  = charsLO;
-                    chars = $"{charsUP}{charsLO}";
-                    break;
-                case RandomStringMode.SymbolsAndNumbers:
-                    charsUP = sims;
-                    charsLO = numbers;
-                    chars   = $"{charsUP}{charsLO}";
-                    break;
-                case RandomStringMode.OnlySymbols:
-                    charsUP = sims;
-                    charsLO = sims;
-                    //sims    = "|\\!\"£%&/()=?'^[]+*@#°,;.:-_<>";
-                    chars   = sims;
-                    numbers = sims;
-                    break;
-                case RandomStringMode.OnlyNumbers:
-                    charsUP = numbers;
-                    charsLO = numbers;
-                    sims    = numbers;
-                    chars   = numbers;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+                return string.Empty;
             }
+
+            string result = "";
+
+            using (RNGCryptoServiceProvider provider = new System.Security.Cryptography.RNGCryptoServiceProvider())
+            {
+
+
+                switch (mode)
+                {
+                    case RandomStringMode.Full:
+
+                        #region FULL
+
+                        var b = length % 4;
+                        var m = length / 4;
+
+                        var nums0    = GetRandomNumbersOnly(provider, m);
+                        var charsUp0 = GetRandomUpperCharactersOnly(provider, m);
+                        var charsLo0 = GetRandomLowerCharactersOnly(provider, m);
+                        var syms0    = GetRandomSymbolsOnly(provider, m, _safeWeb);
+                        var s        = Shuffle($"{nums0}{charsUp0}{charsLo0}{syms0}");
+                        result = $"{GetRandomUpperCharactersOnly(provider, b)}{s}";
+
+                        #endregion
+
+                        break;
+                    case RandomStringMode.CharactersOnly:
+
+                        #region CharactersOnly
+
+                        var    b0      = length % 2;
+                        var    charsUp = GetRandomUpperCharactersOnly(provider, length / 2);
+                        var    charsLo = GetRandomLowerCharactersOnly(provider, length / 2);
+                        string pre     = "";
+                        if (b0 > 0)
+                        {
+                            pre = GetRandomUpperCharactersOnly(provider, b0);
+                        }
+
+                        result = Shuffle($"{pre}{charsLo}{charsUp}");
+
+                        #endregion
+
+                        break;
+                    case RandomStringMode.CharacterAndNumbers:
+
+                        #region CharacterAndNumbers
+
+                        var b1 = length % 3;
+                        var mi = length / 3;
+
+                        var    nums1    = GetRandomNumbersOnly(provider, mi);
+                        var    charsUp1 = GetRandomUpperCharactersOnly(provider, mi);
+                        var    charsLo1 = GetRandomLowerCharactersOnly(provider, mi);
+                        string pre1     = "";
+                        if (b1 > 0)
+                        {
+                            pre1 = GetRandomUpperCharactersOnly(provider, b1);
+                        }
+
+                        var sh1 = Shuffle($"{nums1}{charsUp1}{charsLo1}");
+
+                        result = $"{pre1}{sh1}";
+
+                        #endregion
+
+                        break;
+                    case RandomStringMode.SymbolsAndNumbers:
+
+                        #region SymbolsAndNumbers
+
+                        var b2 = length % 2;
+                        var m2 = length / 2;
+
+                        var nums2 = GetRandomNumbersOnly(provider, m2);
+                        var syms2 = GetRandomSymbolsOnly(provider, m2, _safeWeb);
+
+                        string pre2 = "";
+                        if (b2 > 0)
+                        {
+                            pre2 = GetRandomNumbersOnly(provider, b2);
+                        }
+
+                        var sh2 = Shuffle($"{nums2}{syms2}");
+
+                        result = $"{pre2}{sh2}";
+
+                        #endregion
+
+                        break;
+                    case RandomStringMode.OnlySymbols:
+                        result = GetRandomSymbolsOnly(provider, length, _safeWeb);
+                        break;
+                    case RandomStringMode.OnlyNumbers:
+                        result = GetRandomNumbersOnly(provider, length);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+                }
+
+
+
+            }
+
+            return result;
+
+
+
+
+        }
+
+
+        ///// <summary>Privates the generate random string.</summary>
+        ///// <param name="length">The length.</param>
+        ///// <param name="mode">The mode.</param>
+        ///// <returns></returns>
+        ///// <exception cref="ArgumentOutOfRangeException">mode - null</exception>
+        //[NotNull]
+        //private string PrivateGenerateRandomString(int length, RandomStringMode mode)
+        //{
+        //    string result = "";
+
+        //    using (RNGCryptoServiceProvider provider = new System.Security.Cryptography.RNGCryptoServiceProvider())
+        //    {
+        //        switch (mode)
+        //        {
+        //            case RandomStringMode.Full:
+        //                break;
+        //            case RandomStringMode.CharactersOnly:
+        //                break;
+        //            case RandomStringMode.CharacterAndNumbers:
+        //                break;
+        //            case RandomStringMode.SymbolsAndNumbers:
+        //                break;
+        //            case RandomStringMode.OnlySymbols:
+        //                result = GetRandomSymbolsOnly(provider, length, _safeWeb);
+        //                break;
+        //            case RandomStringMode.OnlyNumbers:
+        //                result = GetRandomNumbersOnly(provider, length);
+        //                break;
+        //            default:
+        //                throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+        //        }
+        //    }
+
+        //    return result;
+
+        //    /*
+        //    string charsUP = "QWERTYUIOPASDFGHJKLZXCVBNM";
+        //    string charsLO = "qwertyuiopasdfghjklzxcvbnm";
+        //    string sims    = "|\\!\"£%&/()=?'^[]+*@#°,;.:-_<>~";
+        //    string simsWeb = "-_.~$^|";
+        //    string chars   = $@"QqWwEe€RrTtYyUuIiOoPpéè[*+AaSsDdFfGgHhJjKkLlçò@°à#§ù><ZzXxCcVvBbNnMm-_1!23£4$5%6&7890?ì^";
+        //    string numbers = "1234567890";
+
+        //    if (_safeWeb)
+        //    {
+        //        chars = simsWeb + $@"QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm1234567890";
+        //        sims = simsWeb;
+        //    }
+
+        //    switch (mode)
+        //    {
+        //        case RandomStringMode.Full:
+        //            break;
+        //        case RandomStringMode.CharactersOnly:
+        //            sims    = charsLO;
+        //            chars   = $"{charsUP}{charsLO}";
+        //            numbers = charsUP;
+        //            break;
+        //        case RandomStringMode.CharacterAndNumbers:
+        //            sims  = charsLO;
+        //            chars = $"{charsUP}{charsLO}";
+        //            break;
+        //        case RandomStringMode.SymbolsAndNumbers:
+        //            charsUP = sims;
+        //            charsLO = numbers;
+        //            chars   = $"{charsUP}{charsLO}";
+        //            break;
+        //        case RandomStringMode.OnlySymbols:
+        //            charsUP = sims;
+        //            charsLO = sims;
+        //            chars   = sims;
+        //            numbers = sims;
+        //            break;
+        //        case RandomStringMode.OnlyNumbers:
+        //            charsUP = numbers;
+        //            charsLO = numbers;
+        //            sims    = numbers;
+        //            chars   = numbers;
+        //            break;
+        //        default:
+        //            throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+        //    }
             
 
-            var first = new String(Enumerable.Repeat(charsLO, 1)
-                                             .Select(s => s[_r.Next(s.Length)]).ToArray());
-            var second = new String(Enumerable.Repeat(charsUP, 1)
-                                              .Select(s => s[_r.Next(s.Length)]).ToArray());
-            var numberRand = new String(Enumerable.Repeat(numbers, 1)
-                                                  .Select(s => s[_r.Next(s.Length)]).ToArray());
+        //    var first = new String(Enumerable.Repeat(charsLO, 1)
+        //                                     .Select(s => s[_r.Next(s.Length)]).ToArray());
+        //    var second = new String(Enumerable.Repeat(charsUP, 1)
+        //                                      .Select(s => s[_r.Next(s.Length)]).ToArray());
+        //    var numberRand = new String(Enumerable.Repeat(numbers, 1)
+        //                                          .Select(s => s[_r.Next(s.Length)]).ToArray());
 
-            var sim = new String(Enumerable.Repeat(sims, 1)
-                                           .Select(s => s[_r.Next(s.Length)]).ToArray());
+        //    var sim = new String(Enumerable.Repeat(sims, 1)
+        //                                   .Select(s => s[_r.Next(s.Length)]).ToArray());
 
-            var last = "";
-            if(length >4)
+        //    var last = "";
+        //    if(length >4)
+        //    {
+        //        last = new string(Enumerable.Repeat(chars, length)
+        //                                    .Select(s => s[_r.Next(s.Length)]).ToArray());
+        //    }
+
+        //    return $"{first}{numberRand}{sim}{second}{last}".Substring(0,length);
+            
+        //     */
+        //}
+
+
+        [NotNull]
+        private static string Shuffle([NotNull] string orderedString)
+        {
+            if (orderedString.Length == 0)
             {
-                last = new string(Enumerable.Repeat(chars, length)
-                                            .Select(s => s[_r.Next(s.Length)]).ToArray());
+                return string.Empty;
             }
 
-            return $"{first}{numberRand}{sim}{second}{last}".Substring(0,length);
+            var shuffled = new List<char>();
+            var ordered  = orderedString.ToList();
+            var random   = new Random();
+
+            while (ordered.Any())
+            {
+                int p = random.Next(ordered.Count());
+                shuffled.Add(ordered[p]);
+                ordered.RemoveAt(p);
+            }
+
+            return string.Concat(shuffled);
         }
+
+        [NotNull]
+        private static string GetRandomInternal([NotNull] RNGCryptoServiceProvider provider, int amount, string validMatch,
+                                                string exclusions = "")
+        {
+            if (amount == 0)
+            {
+                return string.Empty;
+            }
+
+            string s = "";
+            if (!string.IsNullOrEmpty(exclusions) && exclusions.Length == validMatch.Length)
+            {
+                exclusions = "";
+            }
+
+            var realValidMatch = validMatch;
+            if (!string.IsNullOrEmpty(exclusions) && !string.IsNullOrWhiteSpace(exclusions))
+            {
+                realValidMatch = string.Concat(validMatch.Except(exclusions));
+            }
+
+            while (s.Length != amount)
+            {
+                byte[] oneByte = new byte[1];
+                provider.GetBytes(oneByte);
+                char character = (char) oneByte[0];
+                if (realValidMatch.Contains(character) && s.LastOrDefault() != character)
+                {
+                    s += character;
+                }
+            }
+
+            return s;
+        }
+
+
+        private static string GetRandomSymbolsOnly(RNGCryptoServiceProvider provider, int amount, bool webSafe = true,
+                                                   string exclusions = "")
+        {
+            var r = webSafe
+                        ? GetRandomSymbolsWebSafeOnly(provider, amount, exclusions)
+                        : GetRandomSymbolsWebUnsafeOnly(provider, amount, exclusions);
+
+            return r;
+        }
+
+        [NotNull]
+        private static string GetRandomSymbolsWebSafeOnly(RNGCryptoServiceProvider provider, int amount,
+                                                          string exclusions = "")
+        {
+            string valid = "|!^+*.-_~";
+            return GetRandomInternal(provider, amount, valid, exclusions);
+        }
+
+
+        [NotNull]
+        private static string GetRandomSymbolsWebUnsafeOnly(RNGCryptoServiceProvider provider, int amount,
+                                                            string exclusions = "")
+        {
+            return GetRandomInternal(provider, amount, Symbols, exclusions);
+        }
+
+
+        [NotNull]
+        private static string GetRandomNumbersOnly(RNGCryptoServiceProvider provider, int amount,
+                                                   string exclusions = "")
+        {
+            return GetRandomInternal(provider, amount, Numbers, exclusions);
+        }
+
+        [NotNull]
+        private static string GetRandomLowerCharactersOnly(RNGCryptoServiceProvider provider, int amount,
+                                                           string exclusions = "")
+        {
+            return GetRandomInternal(provider, amount, CharsLowercase, exclusions);
+        }
+
+        [NotNull]
+        private static string GetRandomUpperCharactersOnly(RNGCryptoServiceProvider provider, int amount,
+                                                           string exclusions = "")
+        {
+            return GetRandomInternal(provider, amount, CharsUppercase, exclusions);
+        }
+
+        private const string SymbolsWebSafe = "|!^+*.-_~";
+        private const string Symbols = "|\\!\"£%&/()=?'^[]+*@#°,;.:-_<>~";
+        private const string Numbers = "1234567890";
+        private const string CharsUppercase = "QWERTYUIOPASDFGHJKLZXCVBNM";
+        private const string CharsLowercase = "qwertyuiopasdfghjklzxcvbnm";
+
 
         /// <summary>Generate a Random string value excluding given values</summary>
         /// <param name="length">string length</param>
@@ -265,25 +548,37 @@ namespace PH.PicoCrypt2
         /// <param name="mode">random mode</param>
         /// <returns>a random string</returns>
         [NotNull]
-        public string GenerateRandomString(int length, [NotNull] List<string> excludeValues, RandomStringMode mode = RandomStringMode.Full)
+        public string GenerateRandomString(int length, [NotNull] List<string> excludeValues,
+                                           RandomStringMode mode = RandomStringMode.Full)
         {
-            string randomS = PrivateGenerateRandomString(length,mode);
+            string randomS = PrivateGenerateRandomString(length, mode);
             if (excludeValues.Count == 0)
             {
                 return randomS;
             }
             else
             {
-                
-
-                while (excludeValues.Contains(randomS)) randomS = PrivateGenerateRandomString(length,mode);
+                while (excludeValues.Contains(randomS)) randomS = PrivateGenerateRandomString(length, mode);
 
                 return randomS;
-
             }
-
-
         }
+
+        /// <summary>Generates the random string safe for web and URL.</summary>
+        /// <param name="length">The length.</param>
+        /// <param name="excludeValues">The exclude values.</param>
+        /// <param name="mode">The mode.</param>
+        /// <returns></returns>
+        [NotNull]
+        public string GenerateRandomStringSafeForWebAndUrl(int length, [NotNull] List<string> excludeValues,
+                                                           RandomStringMode mode = RandomStringMode.Full)
+        {
+            _safeWeb = true;
+            var r = GenerateRandomString(length, excludeValues, mode);
+            _safeWeb = false;
+            return r;
+        }
+
 
         /// <summary>Generate a Random string value excluding given regex pattern</summary>
         /// <param name="length">string length</param>
@@ -292,7 +587,8 @@ namespace PH.PicoCrypt2
         /// <returns></returns>
         /// <exception cref="ArgumentNullException">excludePattern</exception>
         [NotNull]
-        public string GenerateRandomString(int length, [NotNull] Regex excludePattern, RandomStringMode mode = RandomStringMode.Full)
+        public string GenerateRandomString(int length, [NotNull] Regex excludePattern,
+                                           RandomStringMode mode = RandomStringMode.Full)
         {
             if (excludePattern is null)
             {
@@ -304,9 +600,23 @@ namespace PH.PicoCrypt2
             while (excludePattern.IsMatch(randomS)) randomS = PrivateGenerateRandomString(length, mode);
 
             return randomS;
-
-            
         }
+
+        /// <summary>Generates the random string safe for web and URL.</summary>
+        /// <param name="length">The length.</param>
+        /// <param name="excludePattern">The exclude pattern.</param>
+        /// <param name="mode">The mode.</param>
+        /// <returns></returns>
+        [NotNull]
+        public string GenerateRandomStringSafeForWebAndUrl(int length, [NotNull] Regex excludePattern,
+                                                           RandomStringMode mode = RandomStringMode.Full)
+        {
+            _safeWeb = true;
+            var r = GenerateRandomString(length, excludePattern, mode);
+            _safeWeb = false;
+            return r;
+        }
+
 
         /// <summary>
         /// Generate a Random string value excluding given values and pattern
@@ -319,7 +629,9 @@ namespace PH.PicoCrypt2
         /// <exception cref="ArgumentNullException">excludePattern</exception>
         /// <exception cref="ArgumentException">Value cannot be an empty collection. - excludeValues</exception>
         [NotNull]
-        public string GenerateRandomString(int length, [NotNull] List<string> excludeValues, [NotNull] Regex excludePattern, RandomStringMode mode = RandomStringMode.Full)
+        public string GenerateRandomString(int length, [NotNull] List<string> excludeValues,
+                                           [NotNull] Regex excludePattern,
+                                           RandomStringMode mode = RandomStringMode.Full)
         {
             if (excludePattern is null)
             {
@@ -331,12 +643,39 @@ namespace PH.PicoCrypt2
                 throw new ArgumentException("Value cannot be an empty collection.", nameof(excludeValues));
             }
 
-            string randomS = PrivateGenerateRandomString(length,mode);
+            string randomS = PrivateGenerateRandomString(length, mode);
 
-            while (excludePattern.IsMatch(randomS) || excludeValues.Contains(randomS)) randomS = PrivateGenerateRandomString(length, mode);
+            while (excludePattern.IsMatch(randomS) || excludeValues.Contains(randomS))
+                randomS = PrivateGenerateRandomString(length, mode);
 
             return randomS;
         }
+
+        /// <summary>Generates the random string safe for web and URL.</summary>
+        /// <param name="length">The length.</param>
+        /// <param name="excludeValues">The exclude values.</param>
+        /// <param name="excludePattern">The exclude pattern.</param>
+        /// <param name="mode">The mode.</param>
+        /// <returns></returns>
+        [NotNull]
+        public string GenerateRandomStringSafeForWebAndUrl(int length, [NotNull] List<string> excludeValues, [NotNull] Regex excludePattern,
+                                                           RandomStringMode mode = RandomStringMode.Full)
+        {
+            _safeWeb = true;
+            var r = GenerateRandomString(length, excludeValues, excludePattern, mode);
+            _safeWeb = false;
+            return r;
+        }
+
+        /// <summary>Shuffles the string.</summary>
+        /// <param name="orderedString">The ordered string.</param>
+        /// <returns></returns>
+        [NotNull]
+        public string ShuffleString([NotNull] string orderedString)
+        {
+            return Shuffle(orderedString);
+        }
+
 
         /// <summary>Gets the cipher.</summary>
         /// <param name="szKeyBase">The sz key base.</param>
@@ -347,7 +686,6 @@ namespace PH.PicoCrypt2
         {
             using (SHA256 sha = SHA256Managed.Create())
             {
-
                 var keySha = sha.ComputeHash(Encoding.UTF8.GetBytes(szKeyBase));
                 var ivSha  = sha.ComputeHash(Encoding.UTF8.GetBytes(szIVBase));
 
@@ -406,8 +744,6 @@ namespace PH.PicoCrypt2
         }
 
 
-
-
         /// <summary>Gets the string from hash.</summary>
         /// <param name="hash">The hash.</param>
         /// <returns></returns>
@@ -419,6 +755,7 @@ namespace PH.PicoCrypt2
             {
                 result.Append(hash[i].ToString("X2"));
             }
+
             return result.ToString();
         }
 
@@ -430,7 +767,6 @@ namespace PH.PicoCrypt2
         [NotNull]
         public string GenerateSha256String([NotNull] string inputValue)
         {
-            
             byte[] bytes = Encoding.UTF8.GetBytes(inputValue);
             byte[] hash  = _sha256.ComputeHash(bytes);
             return GetStringFromHash(hash);
@@ -444,7 +780,6 @@ namespace PH.PicoCrypt2
         [NotNull]
         public string GenerateSha512String([NotNull] string inputValue)
         {
-            
             byte[] bytes = Encoding.UTF8.GetBytes(inputValue);
             byte[] hash  = _sha512.ComputeHash(bytes);
             return GetStringFromHash(hash);
