@@ -6,34 +6,35 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageId>PH.PicoCrypt2</PackageId>
 
-    
-    <Description>A  c# netstandard utility for simple crypt/decrypt text. The code is written in .NET C#.
 
-      </Description>
+    <Description>
+      A  c# netstandard utility for simple crypt/decrypt text. The code is written in .NET C#.
+
+    </Description>
     <PackageReleaseNotes>
     </PackageReleaseNotes>
 
-    
+
     <PackageTags>UTF8,string textt,encryption,decryption,hashing</PackageTags>
 
-    <PackageVersion>1.0.5-staging</PackageVersion>
+    <PackageVersion>1.0.5</PackageVersion>
+    <AssemblyVersion>1.0.5</AssemblyVersion>
+    <FileVersion>1.0.5</FileVersion>
+    <Version>1.0.5</Version>
+
     <Authors>Paolo Innocenti</Authors>
     <Copyright>Copyright PH 2020 (c) paonath@gmail.com. All rights reserved.</Copyright>
     <RepositoryUrl>https://github.com/paonath/PH.PicoCrypt2</RepositoryUrl>
     <PackageProjectUrl>https://github.com/paonath/PH.PicoCrypt2</PackageProjectUrl>
-   
+
 
     <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-    
+
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  
-
-
-
 
 
   <ItemGroup>
