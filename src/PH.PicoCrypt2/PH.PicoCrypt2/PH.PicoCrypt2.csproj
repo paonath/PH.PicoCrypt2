@@ -17,10 +17,10 @@
 
     <PackageTags>UTF8,string textt,encryption,decryption,hashing</PackageTags>
 
-    <PackageVersion>1.0.5</PackageVersion>
-    <AssemblyVersion>1.0.5</AssemblyVersion>
-    <FileVersion>1.0.5</FileVersion>
-    <Version>1.0.5</Version>
+    <PackageVersion>1.0.6-staging</PackageVersion>
+    <AssemblyVersion>1.0.6</AssemblyVersion>
+    <FileVersion>1.0.6</FileVersion>
+    <Version>1.0.6</Version>
 
     <Authors>Paolo Innocenti</Authors>
     <Copyright>Copyright PH 2020 (c) paonath@gmail.com. All rights reserved.</Copyright>
