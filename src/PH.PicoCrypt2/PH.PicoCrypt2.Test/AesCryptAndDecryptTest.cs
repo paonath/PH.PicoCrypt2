@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace PH.PicoCrypt2.Test
@@ -33,7 +34,7 @@ namespace PH.PicoCrypt2.Test
             var s         = "zQIcqlKjN9euhZdHbNo6aQ==";
             var p         = "a password";
 
-            IPicoCrypt a = new AesCrypt();
+            IAesCrypt a = new AesCrypt();
 
             var plainText = a.DecryptUtf8(s, p);
 
@@ -68,7 +69,7 @@ namespace PH.PicoCrypt2.Test
             string h256_0 = "";
             string h512_0 = "";
 
-            using (IPicoCrypt a = new AesCrypt())
+            using (IAesCrypt a = new AesCrypt())
             {
                 h256_0 = a.GenerateSha256String(s);
                 h512_0 = a.GenerateSha512String(s);
@@ -102,7 +103,7 @@ namespace PH.PicoCrypt2.Test
             var s = "a string";
             var p = "a password";
 
-            IPicoCrypt a = new AesCrypt();
+            IAesCrypt a = new AesCrypt();
 
             var chyper = a.EncryptUtf8(s, p, s);
 
@@ -142,6 +143,52 @@ namespace PH.PicoCrypt2.Test
             Assert.Equal(onlyNumbers, $"{i}");
 
         }
+
+        [Fact]
+        public void ShuffleAStringWillReturnDifferentString()
+        {
+            var e = string.Empty;
+            var s = "this is a string text";
+            IPicoCrypt a = new AesCrypt();
+            var shuffle = a.ShuffleString(s);
+            var eShuffle = a.ShuffleString(e);
+
+            var chars0 = s.ToCharArray().OrderBy(x => x);
+            var chars1 = shuffle.ToCharArray().OrderBy(x => x);
+
+            Assert.NotEqual(s,shuffle);
+            Assert.Equal(chars1,chars0);
+            Assert.Empty(eShuffle);
+        }
+
+        [Fact]
+        public void EncodeAsBase64()
+        {
+            var        s = "this is a string text";
+            var expected = "dGhpcyBpcyBhIHN0cmluZyB0ZXh0";
+            IPicoCrypt a = new AesCrypt();
+
+            var result = a.Base64Encode(s);
+
+            Assert.Equal(expected,result);
+            Assert.NotEqual(s,result);
+
+        }
+
+        [Fact]
+        public void DecodeFromBase64()
+        {
+            var s = "dGhpcyBpcyBhIHN0cmluZyB0ZXh0";
+            var expected = "this is a string text";
+            IPicoCrypt a = new AesCrypt();
+
+            var result = a.Base64Decode(s);
+
+            Assert.Equal(expected,result);
+            Assert.NotEqual(s,result);
+
+        }
+
     }
 
 }

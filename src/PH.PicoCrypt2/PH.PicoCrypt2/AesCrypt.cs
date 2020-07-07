@@ -9,11 +9,13 @@ using JetBrains.Annotations;
 
 namespace PH.PicoCrypt2
 {
+
     /// <summary>
-    /// Crypt Service based on AES Alg.
+    /// Crypt Service implementation based on AES Alg.
     /// </summary>
-    /// <seealso cref="PH.PicoCrypt2.IPicoCrypt" />
-    public class AesCrypt : IPicoCrypt
+    /// <seealso cref="PH.PicoCrypt2.IAesCrypt" />
+    /// <seealso cref="System.IDisposable" />
+    public class AesCrypt : IAesCrypt
     {
         private readonly Random _r;
         private SHA256 _sha256;
@@ -204,6 +206,7 @@ namespace PH.PicoCrypt2
             return r;
         }
 
+        [NotNull]
         private string PrivateGenerateRandomString(int length, RandomStringMode mode)
         {
             if (length == 0)
@@ -487,7 +490,8 @@ namespace PH.PicoCrypt2
         }
 
 
-        private static string GetRandomSymbolsOnly(RNGCryptoServiceProvider provider, int amount, bool webSafe = true,
+        [NotNull]
+        private static string GetRandomSymbolsOnly([NotNull] RNGCryptoServiceProvider provider, int amount, bool webSafe = true,
                                                    string exclusions = "")
         {
             var r = webSafe
@@ -498,7 +502,7 @@ namespace PH.PicoCrypt2
         }
 
         [NotNull]
-        private static string GetRandomSymbolsWebSafeOnly(RNGCryptoServiceProvider provider, int amount,
+        private static string GetRandomSymbolsWebSafeOnly([NotNull] RNGCryptoServiceProvider provider, int amount,
                                                           string exclusions = "")
         {
             string valid = "|!^+*.-_~";
@@ -507,7 +511,7 @@ namespace PH.PicoCrypt2
 
 
         [NotNull]
-        private static string GetRandomSymbolsWebUnsafeOnly(RNGCryptoServiceProvider provider, int amount,
+        private static string GetRandomSymbolsWebUnsafeOnly([NotNull] RNGCryptoServiceProvider provider, int amount,
                                                             string exclusions = "")
         {
             return GetRandomInternal(provider, amount, Symbols, exclusions);
@@ -515,21 +519,21 @@ namespace PH.PicoCrypt2
 
 
         [NotNull]
-        private static string GetRandomNumbersOnly(RNGCryptoServiceProvider provider, int amount,
+        private static string GetRandomNumbersOnly([NotNull] RNGCryptoServiceProvider provider, int amount,
                                                    string exclusions = "")
         {
             return GetRandomInternal(provider, amount, Numbers, exclusions);
         }
 
         [NotNull]
-        private static string GetRandomLowerCharactersOnly(RNGCryptoServiceProvider provider, int amount,
+        private static string GetRandomLowerCharactersOnly([NotNull] RNGCryptoServiceProvider provider, int amount,
                                                            string exclusions = "")
         {
             return GetRandomInternal(provider, amount, CharsLowercase, exclusions);
         }
 
         [NotNull]
-        private static string GetRandomUpperCharactersOnly(RNGCryptoServiceProvider provider, int amount,
+        private static string GetRandomUpperCharactersOnly([NotNull] RNGCryptoServiceProvider provider, int amount,
                                                            string exclusions = "")
         {
             return GetRandomInternal(provider, amount, CharsUppercase, exclusions);
