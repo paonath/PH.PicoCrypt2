@@ -160,5 +160,25 @@ namespace PH.PicoCrypt2
         /// <returns>hash string</returns>
         string GenerateSha512String(string inputValue);
 
+        ///// <summary>Calculates the MD5 hash.</summary>
+        ///// <param name="utf8StringValue">The UTF8 string value.</param>
+        ///// <returns>MD5 hash</returns>
+        ///// <exception cref="ArgumentException">Value cannot be null or empty. - utf8StringValue</exception>
+        //byte[] CalculateMd5Hash(string utf8StringValue);
+
+        /// <summary>Calculates the MD5 hash string.</summary>
+        /// <param name="utf8StringValue">The UTF8 string value.</param>
+        /// <returns>MD5 hash string value</returns>
+        string CalculateMd5HashString(string utf8StringValue);
+
+        ///// <summary>Calculates the MD5 hash.</summary>
+        ///// <param name="data">The data to hash.</param>
+        ///// <returns>MD5 hash</returns>
+        //byte[] CalculateMd5Hash(byte[] data);
+
+        /// <summary>Calculates the MD5 hash string.</summary>
+        /// <param name="data">The data to hash.</param>
+        /// <returns>MD5 hash string value</returns>
+        string CalculateMd5HashString(byte[] data);
     }
 }

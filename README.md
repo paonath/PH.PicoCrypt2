@@ -49,3 +49,17 @@ var s = a.GenerateRandomString(7);
 var onlyNumbers = a.GenerateRandomString(5, RandomStringMode.OnlyNumbers);
 
 ```
+
+**CalculateMd5HashString**
+```c#
+IPicoCrypt a = new AesCrypt();
+
+var str = "A";
+
+//calculate md5 checksum of byte array
+var res0 = a.CalculateMd5HashString(Encoding.UTF8.GetBytes(str));
+
+//calculate md5 checksum of string
+var res1 = a.CalculateMd5HashString(str);
+
+```

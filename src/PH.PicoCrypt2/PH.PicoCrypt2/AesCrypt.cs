@@ -22,6 +22,7 @@ namespace PH.PicoCrypt2
         private SHA512 _sha512;
         private bool _safeWeb;
 
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AesCrypt"/> class.
         /// </summary>
@@ -788,6 +789,100 @@ namespace PH.PicoCrypt2
             byte[] hash  = _sha512.ComputeHash(bytes);
             return GetStringFromHash(hash);
         }
+
+        #region MD5
+
+        /// <summary>Converts to hex.</summary>
+        /// <param name="bytes">The bytes.</param>
+        /// <param name="upperCase">if set to <c>true</c> [upper case].</param>
+        /// <returns></returns>
+        [NotNull]
+        public static string ToHex([NotNull] byte[] bytes, bool upperCase)
+        {
+            StringBuilder result = new StringBuilder(bytes.Length*2);
+
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                result.Append(bytes[i].ToString(upperCase ? "X2" : "x2"));
+            }
+
+            return result.ToString();
+            
+        }
+
+
+        /// <summary>Calculates the MD5 hash.</summary>
+        /// <param name="utf8StringValue">The UTF8 string value.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">Value cannot be null or empty. - utf8StringValue</exception>
+        [NotNull]
+        public byte[] CalculateMd5Hash([NotNull] string utf8StringValue)
+        {
+            if (string.IsNullOrEmpty(utf8StringValue) || string.IsNullOrWhiteSpace(utf8StringValue))
+            {
+                throw new ArgumentException("Value cannot be null or empty.", nameof(utf8StringValue));
+            }
+
+            using (MD5 md5 = MD5.Create())
+            {
+                return md5.ComputeHash(Encoding.UTF8.GetBytes(utf8StringValue));
+            }
+        }
+
+
+        /// <summary>Calculates the MD5 hash string.</summary>
+        /// <param name="utf8StringValue">The UTF8 string value.</param>
+        /// <returns>MD5 hash string value</returns>
+        /// <exception cref="ArgumentException">Value cannot be null or empty. - utf8StringValue</exception>
+        [NotNull]
+        public string CalculateMd5HashString([NotNull] string utf8StringValue)
+        {
+            if (string.IsNullOrEmpty(utf8StringValue) || string.IsNullOrWhiteSpace(utf8StringValue))
+            {
+                throw new ArgumentException("Value cannot be null or empty.", nameof(utf8StringValue));
+            }
+            //return ToHex(CalculateMd5Hash(utf8StringValue), false);
+            return BitConverter.ToString(CalculateMd5Hash(utf8StringValue)).Replace("-","").ToLower();
+            //return System.Text.Encoding.UTF8.GetString(CalculateMd5Hash(utf8StringValue));
+        }
+
+        /// <summary>Calculates the MD5 hash.</summary>
+        /// <param name="data">The data.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">data</exception>
+        [NotNull]
+        public byte[] CalculateMd5Hash([NotNull] byte[] data)
+        {
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            using (MD5 md5 = MD5.Create())
+            {
+                return md5.ComputeHash(data);
+            }
+        }
+
+        /// <summary>Calculates the MD5 hash string.</summary>
+        /// <param name="data">The data to hash.</param>
+        /// <returns>MD5 hash string value</returns>
+        /// <exception cref="ArgumentNullException">data</exception>
+        [NotNull]
+        public string CalculateMd5HashString([NotNull] byte[] data)
+        {
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            //return ToHex(CalculateMd5Hash(data), false);
+            return BitConverter.ToString(CalculateMd5Hash(data)).Replace("-","").ToLower();
+
+            //return System.Text.Encoding.UTF8.GetString(CalculateMd5Hash(data));
+        }
+
+        #endregion
 
         /// <summary>Releases unmanaged and - optionally - managed resources.</summary>
         /// <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
