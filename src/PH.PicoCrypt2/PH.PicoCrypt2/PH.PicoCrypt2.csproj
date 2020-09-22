@@ -15,9 +15,9 @@
     </PackageReleaseNotes>
 
 
-    <PackageTags>UTF8,string textt,encryption,decryption,hashing</PackageTags>
+    <PackageTags>UTF8,string textt,encryption,decryption,hashing,md5</PackageTags>
 
-    <PackageVersion>1.0.6-staging</PackageVersion>
+    <PackageVersion>1.0.6</PackageVersion>
     <AssemblyVersion>1.0.6</AssemblyVersion>
     <FileVersion>1.0.6</FileVersion>
     <Version>1.0.6</Version>
