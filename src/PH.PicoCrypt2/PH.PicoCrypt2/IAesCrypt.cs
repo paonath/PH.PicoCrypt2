@@ -7,7 +7,7 @@ namespace PH.PicoCrypt2
     /// </summary>
     /// <seealso cref="PH.PicoCrypt2.IPicoCrypt" />
     /// <seealso cref="System.IDisposable" />
-    public interface IAesCrypt : IPicoCrypt , IDisposable
+    public interface IAesCrypt : IPicoCrypt , IDisposable 
     {
 
     }

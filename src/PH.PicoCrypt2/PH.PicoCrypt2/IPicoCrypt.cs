@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PH.PicoCrypt2
 {
@@ -171,14 +174,60 @@ namespace PH.PicoCrypt2
         /// <returns>MD5 hash string value</returns>
         string CalculateMd5HashString(string utf8StringValue);
 
-        ///// <summary>Calculates the MD5 hash.</summary>
-        ///// <param name="data">The data to hash.</param>
-        ///// <returns>MD5 hash</returns>
-        //byte[] CalculateMd5Hash(byte[] data);
+    ///// <summary>Calculates the MD5 hash.</summary>
+    ///// <param name="data">The data to hash.</param>
+    ///// <returns>MD5 hash</returns>
+    //byte[] CalculateMd5Hash(byte[] data);
 
-        /// <summary>Calculates the MD5 hash string.</summary>
-        /// <param name="data">The data to hash.</param>
-        /// <returns>MD5 hash string value</returns>
-        string CalculateMd5HashString(byte[] data);
+    /// <summary>Calculates the MD5 hash string.</summary>
+    /// <param name="data">The data to hash.</param>
+    /// <returns>MD5 hash string value</returns>
+    string CalculateMd5HashString(byte[] data);
+
+    ///// <summary>
+    ///// Gets the MD5 from stream asynchronous.
+    ///// </summary>
+    ///// <param name="stream">The stream.</param>
+    ///// <param name="token">The token.</param>
+    ///// <returns>MD5 hash</returns>
+    //Task<byte[]> GetMd5FromStreamAsync(Stream stream, CancellationToken token = default(CancellationToken));
+
+    ///// <summary>
+    ///// Gets the MD5 from stream.
+    ///// </summary>
+    ///// <param name="stream">The stream.</param>
+    ///// <returns></returns>
+    //byte[] GetMd5FromStream(Stream stream);
+
+    /// <summary>
+    /// Gets the MD5 hash string from stream asynchronous.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <param name="token">The token.</param>
+    /// <returns></returns>
+    Task<string> GetMd5HashStringFromStreamAsync(Stream stream, CancellationToken token = default(CancellationToken));
+
+    /// <summary>
+    /// Gets the MD5 hash string from stream.
+    /// </summary>
+    /// <param name="stream">The stream.</param>
+    /// <returns></returns>
+    string GetMd5HashStringFromStream(Stream stream);
+
+    /// <summary>
+    /// Gets the MD5 hash string from file asynchronous.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    /// <param name="token">The token.</param>
+    /// <returns></returns>
+    Task<string> GetMd5HashStringFromFileAsync(FileInfo file, CancellationToken token = default(CancellationToken));
+
+    /// <summary>
+    /// Gets the MD5 hash string from file.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    /// <returns></returns>
+    string GetMd5HashStringFromFile(FileInfo file);
+
     }
 }
