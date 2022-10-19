@@ -17,13 +17,13 @@
 
     <PackageTags>UTF8,string textt,encryption,decryption,hashing,md5</PackageTags>
 
-    <PackageVersion>1.0.6</PackageVersion>
-    <AssemblyVersion>1.0.6</AssemblyVersion>
-    <FileVersion>1.0.6</FileVersion>
+    <PackageVersion>1.0.2</PackageVersion>
+    <AssemblyVersion>1.0.7</AssemblyVersion>
+    <FileVersion>1.0.7</FileVersion>
     <Version>1.0.6</Version>
 
     <Authors>Paolo Innocenti</Authors>
-    <Copyright>Copyright PH 2020 (c) paonath@gmail.com. All rights reserved.</Copyright>
+    <Copyright>Copyright PH 2022 (c) paonath@gmail.com. All rights reserved.</Copyright>
     <RepositoryUrl>https://github.com/paonath/PH.PicoCrypt2</RepositoryUrl>
     <PackageProjectUrl>https://github.com/paonath/PH.PicoCrypt2</PackageProjectUrl>
 
