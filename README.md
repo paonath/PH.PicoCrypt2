@@ -63,3 +63,21 @@ var res0 = a.CalculateMd5HashString(Encoding.UTF8.GetBytes(str));
 var res1 = a.CalculateMd5HashString(str);
 
 ```
+
+**CalculateMd5OnAFile**
+```c#
+var result = "";
+using (var i = new AesCrypt())
+{
+    result = await i.GetMd5HashStringFromFileAsync(new FileInfo("./sample.txt"));
+    try
+    {
+        await i.GetMd5HashStringFromFileAsync(new FileInfo("not found.example"));
+        
+    }
+    catch (Exception e)
+    {
+        notfound = e;
+    }
+}
+```
