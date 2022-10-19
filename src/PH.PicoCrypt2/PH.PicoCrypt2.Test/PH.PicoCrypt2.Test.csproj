@@ -19,5 +19,13 @@
   <ItemGroup>
     <ProjectReference Include="..\PH.PicoCrypt2\PH.PicoCrypt2.csproj" />
   </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="sample.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
 </Project>

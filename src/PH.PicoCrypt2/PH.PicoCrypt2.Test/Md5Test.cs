@@ -83,6 +83,30 @@ namespace PH.PicoCrypt2.Test
 
         }
 
+        [Fact]
+        public async void TestAFileAsync()
+        {
+	        Exception notfound = null;
+	        var md5 = "e844e8fca3d0c65f9e9eb337e6b5162c";
+	        var result = "";
+	        using (var i = new AesCrypt())
+	        {
+		        result = await i.GetMd5HashStringFromFileAsync(new FileInfo("./sample.txt"));
+		        try
+		        {
+			        await i.GetMd5HashStringFromFileAsync(new FileInfo("not found.example"));
+			        
+		        }
+		        catch (Exception e)
+		        {
+			        notfound = e;
+		        }
+	        }
+	        
+	        Assert.NotNull(notfound);
+	        Assert.Equal(md5,result);
+        }
+        
         public static Stream GenerateStreamFromString(string s)
         {
 	        var stream = new MemoryStream();
