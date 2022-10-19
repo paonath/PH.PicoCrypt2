@@ -137,10 +137,12 @@ namespace PH.PicoCrypt2.Test
             var s = a.GenerateRandomString(7);
 
             var onlyNumbers = a.GenerateRandomString(5, RandomStringMode.OnlyNumbers);
-            var i           = int.TryParse(onlyNumbers, out int number); 
+            var i           = int.TryParse(onlyNumbers, out int number);
+            var emtpy       = a.GenerateRandomString(0, RandomStringMode.Full);
 
             Assert.True(s.Length == 7);
             Assert.True(i);
+						Assert.Empty(emtpy);
 
         }
 
